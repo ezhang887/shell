@@ -3,4 +3,6 @@
 
 char* read_input();
 
+char** tokenize_input();
+
 #endif
