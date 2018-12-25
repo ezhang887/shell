@@ -13,12 +13,13 @@ int main(){
             continue;
         }
         if (strcmp(line, "exit\n") == 0){
-            printf("Exiting shell............\n");
+            free(line);
+            printf("Exiting shell............\n\n\n");
             break;
         }
-        if (line != NULL){
-            free(line);
-        }
+        char** tokens = tokenize_input(line);
+        free(line);
+        free(tokens);
     }
     return 0;
 }
