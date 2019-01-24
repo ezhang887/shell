@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -g -I ./include
+CFLAGS = -g -I ./include -Wall -Werror -pedantic
 TARGET = shell
 SRC = $(wildcard src/*.c)
 MAIN = main.c

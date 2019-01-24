@@ -5,7 +5,6 @@
 
 #define SHELL_LINE_HEADER ">>> "
 #define EXIT_MESSAGE "Exiting shell............\n"
-#define EXIT_KEYWORD "exit"
 
 char *read_input();
 

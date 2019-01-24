@@ -7,21 +7,15 @@
 
 int main(){
     printf("Shell\n");
-    while(1){
+    int status = 1;
+    while(status){
         printf(SHELL_LINE_HEADER);
         char* line = read_input();
-        if (line == NULL){
+        if (line == NULL || line[0] == '\n'){
             continue;
         }
         char** tokens = tokenize_input(line);
-        if (strcmp(line, EXIT_KEYWORD) == 0){
-            free(line);
-            free(tokens);
-            printf(EXIT_MESSAGE);
-            break;
-        }
-        launch_process(tokens);
-        //cleanup
+        status = run_command(tokens);
         free(line);
         free(tokens);
     }
