@@ -11,7 +11,7 @@ OBJ = $(patsubst %.c, %.o, $(SRC))
 	$(CC) $(CFLAGS) -c $< -o $@ 
 
 $(TARGET): $(OBJ)
-	$(CC) $(CFLAGS) $(MAIN) $< -o $@
+	$(CC) $(CFLAGS) $(MAIN) $(OBJ) -o $@
 
 run: $(TARGET)
 	./$(TARGET)

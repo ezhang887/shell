@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "include/parser.h"
+#include "include/commands.h"
 
 int main(){
     printf("Shell\n");
@@ -12,12 +13,15 @@ int main(){
         if (line == NULL){
             continue;
         }
-        if (strcmp(line, "exit\n") == 0){
+        char** tokens = tokenize_input(line);
+        if (strcmp(line, "exit") == 0){
             free(line);
+            free(tokens);
             printf("Exiting shell............\n\n\n");
             break;
         }
-        char** tokens = tokenize_input(line);
+        launch_process(tokens);
+        //cleanup
         free(line);
         free(tokens);
     }

@@ -3,8 +3,8 @@
 
 #define TOKENIZE_BUF_SIZE 64
 
-char* read_input();
+char *read_input();
 
-char** tokenize_input(char* line);
+char **tokenize_input(char *line);
 
 #endif

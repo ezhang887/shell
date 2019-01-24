@@ -5,26 +5,25 @@
 
 #include "../include/parser.h"
 
-char* read_input(){
-    char* line = NULL;
+char *read_input(){
+    char *line = NULL;
     size_t bufsize = 0;
     //error
     if (getline(&line, &bufsize, stdin) == -1){
         return NULL;
     }
-    printf("Input: %s", line);
     return line;
 }
 
-char** tokenize_input(char* line){
+char **tokenize_input(char* line){
     assert(line);
 
     int bufsize = TOKENIZE_BUF_SIZE;
     int curr_pos = 0;
-    char* delim = " \t\r\n\a";
+    char *delim = " \t\r\n\a";
 
-    char** tokens = malloc(bufsize*sizeof(char*));
-    char* curr_token;
+    char **tokens = malloc(bufsize*sizeof(char*));
+    char *curr_token;
 
     assert(tokens);
 
