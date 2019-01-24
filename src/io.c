@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../include/parser.h"
+#include "../include/io.h"
 
 char *read_input(){
     char *line = NULL;
