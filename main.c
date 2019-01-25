@@ -12,6 +12,7 @@ int main(){
         printf(SHELL_LINE_HEADER);
         char* line = read_input();
         if (line == NULL || line[0] == '\n'){
+            free(line);
             continue;
         }
         char** tokens = tokenize_input(line);

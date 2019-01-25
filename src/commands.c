@@ -31,7 +31,7 @@ int launch_process(char **args){
     else{
         waitpid(pid, &status, WUNTRACED);
     }
-    return status;
+    return 1;
 }
 
 int run_builtin(int builtin_idx, char** args){
@@ -54,6 +54,9 @@ int run_builtin(int builtin_idx, char** args){
 }
 
 int run_command(char** args){
+    if (!args[0]){
+        return 1;
+    }
     int num_builtins = sizeof(builtins)/sizeof(char*);
     for(int i=0; i<num_builtins; i++){
         if (strcmp(args[0], builtins[i]) == 0){
