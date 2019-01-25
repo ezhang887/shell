@@ -116,7 +116,10 @@ int handle_cd(char **args){
 int handle_pwd(char** args){
     assert(strcmp(args[0], "pwd") == 0);
     char cwd[64];
-    getcwd(cwd, sizeof(cwd));
+    char* rv = getcwd(cwd, sizeof(cwd));
+    if (!rv){
+        perror("[handle_pwd], error with getcwd");
+    }
     printf_color(ANSI_COLOR_CYAN, "%s\n", cwd);
     return CONTINUE_CODE;
 }
