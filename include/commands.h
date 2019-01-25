@@ -12,5 +12,6 @@ int run_command(char **args);
 
 int handle_ls(char **args);
 int handle_cd(char **args);
+int handle_pwd(char **args);
 
 #endif

@@ -8,10 +8,12 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <string.h>
+#include <assert.h>
 
 char* builtins[] = {
     "cd",
     "ls", 
+    "pwd",
     "help",
     "exit"
 };
@@ -45,8 +47,11 @@ int run_builtin(int builtin_idx, char **args){
             rv = handle_ls(args);
             break;
         case 2:
+            rv = handle_pwd(args);
             break;
         case 3:
+            break;
+        case 4:
             rv = EXIT_CODE;
             break;
         default:
@@ -70,6 +75,8 @@ int run_command(char **args){
 }
 
 int handle_ls(char **args){
+    assert(strcmp(args[0], "ls") == 0);
+
     struct dirent **files;
     int n = scandir(".", &files, NULL, alphasort);
     if (n == -1){
@@ -96,10 +103,20 @@ int handle_ls(char **args){
 }
 
 int handle_cd(char **args){
+    assert(strcmp(args[0], "cd") == 0);
+
     char* path = args[1];
     int rv = chdir(path);
     if (rv == -1){
         perror("[handle_cd], error with chdir");
     }
+    return CONTINUE_CODE;
+}
+
+int handle_pwd(char** args){
+    assert(strcmp(args[0], "pwd") == 0);
+    char cwd[64];
+    getcwd(cwd, sizeof(cwd));
+    printf_color(ANSI_COLOR_CYAN, "%s\n", cwd);
     return CONTINUE_CODE;
 }
