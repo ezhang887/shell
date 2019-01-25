@@ -1,16 +1,17 @@
 #include "../include/commands.h"
+#include "../include/utils.h"
 
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <dirent.h>
 #include <unistd.h>
 #include <string.h>
 
 char* builtins[] = {
     "cd",
-    "ls",
-    "help",
+    "ls", "help",
     "exit"
 };
 
@@ -40,6 +41,7 @@ int run_builtin(int builtin_idx, char **args){
         case 0:
             break;
         case 1:
+            rv = handle_ls(args);
             break;
         case 2:
             break;
@@ -67,5 +69,23 @@ int run_command(char **args){
 }
 
 int handle_ls(char **args){
+    struct dirent **files;
+    int n = scandir(".", &files, NULL, alphasort);
+    for(int i=0; i<n; i++){
+        struct dirent *curr = files[i];
+        if (curr->d_type == DT_REG){
+            printf_color(ANSI_COLOR_BLUE, "%s", curr->d_name);
+            printf("   ");
+        }
+        else if (curr->d_type == DT_DIR){
+            printf_color(ANSI_COLOR_GREEN, "%s", curr->d_name);
+            printf("   ");
+        }
+        else{
+            printf_color(ANSI_COLOR_CYAN, "%s", curr->d_name);
+            printf("   ");
+        }
+    }
+    printf("\n");
     return CONTINUE_CODE;
 }
