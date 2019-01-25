@@ -4,6 +4,7 @@
 
 #include "include/io.h"
 #include "include/commands.h"
+#include "include/utils.h"
 
 int main(){
     printf("Shell\n");
