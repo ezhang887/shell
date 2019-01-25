@@ -9,6 +9,11 @@
 #define ANSI_COLOR_CYAN    "\x1b[36m"
 #define ANSI_COLOR_RESET   "\x1b[0m"
 
-int printf_color(char* color_code, char* string, ...);
+void printf_color(char *color_code, char *string, ...);
+
+void assert_equals(char *a, char *b);
+
+//djb2 hash
+unsigned long hash(char *str);
 
 #endif

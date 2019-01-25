@@ -38,20 +38,21 @@ int launch_process(char **args){
     return CONTINUE_CODE;
 }
 
-int run_builtin(int builtin_idx, char **args){
+int run_builtin(char *command, char **args){
     int rv = CONTINUE_CODE;
-    switch (builtin_idx) {
-        case 0:
+    switch (hash(command)) {
+        case CD:
             rv = handle_cd(args);
-        case 1:
+            break;
+        case LS:
             rv = handle_ls(args);
             break;
-        case 2:
+        case PWD:
             rv = handle_pwd(args);
             break;
-        case 3:
+        case HELP:
             break;
-        case 4:
+        case EXIT:
             rv = EXIT_CODE;
             break;
         default:
@@ -68,42 +69,47 @@ int run_command(char **args){
     int num_builtins = sizeof(builtins)/sizeof(char*);
     for(int i=0; i<num_builtins; i++){
         if (strcmp(args[0], builtins[i]) == 0){
-            return run_builtin(i, args);
+            return run_builtin(args[0], args);
         }
     }
     return launch_process(args);
 }
 
 int handle_ls(char **args){
-    assert(strcmp(args[0], "ls") == 0);
+    assert_equals("ls", args[0]);
 
     struct dirent **files;
     int n = scandir(".", &files, NULL, alphasort);
     if (n == -1){
         perror("[handle_ls], error with scandir");
-        return CONTINUE_CODE;
     }
-    for(int i=0; i<n; i++){
-        struct dirent *curr = files[i];
-        if (curr->d_type == DT_REG){
-            printf_color(ANSI_COLOR_BLUE, "%s", curr->d_name);
-            printf("   ");
-        }
-        else if (curr->d_type == DT_DIR){
-            printf_color(ANSI_COLOR_GREEN, "%s", curr->d_name);
-            printf("   ");
-        }
-        else{
-            printf_color(ANSI_COLOR_CYAN, "%s", curr->d_name);
-            printf("   ");
+    else{
+        for(int i=0; i<n; i++){
+            struct dirent *curr = files[i];
+            if (curr->d_type == DT_REG){
+                printf_color(ANSI_COLOR_BLUE, "%s", curr->d_name);
+                printf("   ");
+            }
+            else if (curr->d_type == DT_DIR){
+                printf_color(ANSI_COLOR_GREEN, "%s", curr->d_name);
+                printf("   ");
+            }
+            else{
+                printf_color(ANSI_COLOR_CYAN, "%s", curr->d_name);
+                printf("   ");
+            }
         }
     }
     printf("\n");
+    for(int i=0; i<n; i++){
+        free(files[i]);
+    }
+    free(files);
     return CONTINUE_CODE;
 }
 
 int handle_cd(char **args){
-    assert(strcmp(args[0], "cd") == 0);
+    assert_equals("cd", args[0]);
 
     char* path = args[1];
     int rv = chdir(path);
@@ -114,7 +120,8 @@ int handle_cd(char **args){
 }
 
 int handle_pwd(char** args){
-    assert(strcmp(args[0], "pwd") == 0);
+    assert_equals("pwd", args[0]);
+
     char cwd[64];
     char* rv = getcwd(cwd, sizeof(cwd));
     if (!rv){
