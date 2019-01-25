@@ -31,11 +31,11 @@ int launch_process(char **args){
     else{
         waitpid(pid, &status, WUNTRACED);
     }
-    return 1;
+    return CONTINUE_CODE;
 }
 
-int run_builtin(int builtin_idx, char** args){
-    int rv = 1;
+int run_builtin(int builtin_idx, char **args){
+    int rv = CONTINUE_CODE;
     switch (builtin_idx) {
         case 0:
             break;
@@ -44,18 +44,18 @@ int run_builtin(int builtin_idx, char** args){
         case 2:
             break;
         case 3:
-            rv = 0;
+            rv = EXIT_CODE;
             break;
         default:
-            rv = 1;
+            rv = CONTINUE_CODE;
             break;
     }
     return rv;
 }
 
-int run_command(char** args){
+int run_command(char **args){
     if (!args[0]){
-        return 1;
+        return CONTINUE_CODE;
     }
     int num_builtins = sizeof(builtins)/sizeof(char*);
     for(int i=0; i<num_builtins; i++){
@@ -64,4 +64,8 @@ int run_command(char** args){
         }
     }
     return launch_process(args);
+}
+
+int handle_ls(char **args){
+    return CONTINUE_CODE;
 }
