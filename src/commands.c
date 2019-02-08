@@ -98,19 +98,19 @@ int handle_ls(char **args){
                 }
             }
             if (curr->d_type == DT_DIR){
-                printf_color(ANSI_COLOR_GREEN, "%s", curr->d_name);
+                printf_color(ANSI_COLOR_BLUE, 1, "%s", curr->d_name);
                 printf("   ");
             }
             else if (is_executable(curr->d_name)){
-                printf_color(ANSI_COLOR_YELLOW, "%s", curr->d_name);
+                printf_color(ANSI_COLOR_GREEN, 1, "%s", curr->d_name);
                 printf("   ");
             }
             else if (curr->d_type == DT_REG){
-                printf_color(ANSI_COLOR_BLUE, "%s", curr->d_name);
+                printf_color(ANSI_COLOR_WHITE, 0, "%s", curr->d_name);
                 printf("   ");
             }
             else{
-                printf_color(ANSI_COLOR_CYAN, "%s", curr->d_name);
+                printf_color(ANSI_COLOR_CYAN, 0, "%s", curr->d_name);
                 printf("   ");
             }
         }
@@ -142,14 +142,14 @@ int handle_pwd(char **args){
     if (!rv){
         perror("[handle_pwd], error with getcwd");
     }
-    printf_color(ANSI_COLOR_CYAN, "%s\n", cwd);
+    printf_color(ANSI_COLOR_CYAN, 1, "%s\n", cwd);
     return CONTINUE_CODE;
 }
 
 int handle_help(char **args){
     assert_equals("help", args[0]);
     for(int i=0; strcmp(builtins[i],"") != 0; i++){
-        printf_color(ANSI_COLOR_CYAN, "%s\n", builtins[i]);
+        printf_color(ANSI_COLOR_CYAN, 1, "%s\n", builtins[i]);
     }
     return CONTINUE_CODE;
 }

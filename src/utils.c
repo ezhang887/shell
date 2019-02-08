@@ -7,7 +7,13 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-void printf_color(char *color_code, char *str, ...){
+void printf_color(char *color_code, int bold, char *str, ...){
+    if (bold){
+        printf("%s", ANSI_BOLD);
+    }
+    else{
+        printf("%s", ANSI_NO_BOLD);
+    }
     printf("%s", color_code);
 
     va_list arg_list;
