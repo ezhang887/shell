@@ -82,12 +82,21 @@ int handle_ls(char **args){
 
     struct dirent **files;
     int n = scandir(".", &files, NULL, alphasort);
+    int ls_a = 0;
+    if (args[1] && args[1][0] == '-'){
+        ls_a = args[1][1] == 'a';
+    }
     if (n == -1){
         perror("[handle_ls], error with scandir");
     }
     else{
         for(int i=0; i<n; i++){
             struct dirent *curr = files[i];
+            if (!ls_a){
+                if (curr->d_name[0] == '.'){
+                    continue;
+                }
+            }
             if (curr->d_type == DT_DIR){
                 printf_color(ANSI_COLOR_GREEN, "%s", curr->d_name);
                 printf("   ");
