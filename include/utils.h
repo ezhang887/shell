@@ -16,4 +16,6 @@ void assert_equals(char *a, char *b);
 //djb2 hash
 unsigned long hash(char *str);
 
+int is_executable(char *file);
+
 #endif

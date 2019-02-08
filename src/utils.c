@@ -4,6 +4,8 @@
 #include <stdarg.h>
 #include <assert.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 void printf_color(char *color_code, char *str, ...){
     printf("%s", color_code);
@@ -27,4 +29,9 @@ unsigned long hash(char *str){
         hash = ((hash << 5) + hash) + *c;
     }
     return hash;
+}
+
+int is_executable(char *file){
+    struct stat sb;
+    return stat(file, &sb) == 0 && sb.st_mode & S_IEXEC;
 }

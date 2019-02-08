@@ -15,7 +15,8 @@ char* builtins[] = {
     "ls", 
     "pwd",
     "help",
-    "exit"
+    "exit",
+    ""
 };
 
 int launch_process(char **args){
@@ -51,6 +52,7 @@ int run_builtin(char *command, char **args){
             rv = handle_pwd(args);
             break;
         case HELP:
+            rv = handle_help(args);
             break;
         case EXIT:
             rv = EXIT_CODE;
@@ -86,12 +88,16 @@ int handle_ls(char **args){
     else{
         for(int i=0; i<n; i++){
             struct dirent *curr = files[i];
-            if (curr->d_type == DT_REG){
-                printf_color(ANSI_COLOR_BLUE, "%s", curr->d_name);
+            if (curr->d_type == DT_DIR){
+                printf_color(ANSI_COLOR_GREEN, "%s", curr->d_name);
                 printf("   ");
             }
-            else if (curr->d_type == DT_DIR){
-                printf_color(ANSI_COLOR_GREEN, "%s", curr->d_name);
+            else if (is_executable(curr->d_name)){
+                printf_color(ANSI_COLOR_YELLOW, "%s", curr->d_name);
+                printf("   ");
+            }
+            else if (curr->d_type == DT_REG){
+                printf_color(ANSI_COLOR_BLUE, "%s", curr->d_name);
                 printf("   ");
             }
             else{
@@ -119,14 +125,22 @@ int handle_cd(char **args){
     return CONTINUE_CODE;
 }
 
-int handle_pwd(char** args){
+int handle_pwd(char **args){
     assert_equals("pwd", args[0]);
 
-    char cwd[64];
+    char cwd[128];
     char* rv = getcwd(cwd, sizeof(cwd));
     if (!rv){
         perror("[handle_pwd], error with getcwd");
     }
     printf_color(ANSI_COLOR_CYAN, "%s\n", cwd);
+    return CONTINUE_CODE;
+}
+
+int handle_help(char **args){
+    assert_equals("help", args[0]);
+    for(int i=0; strcmp(builtins[i],"") != 0; i++){
+        printf_color(ANSI_COLOR_CYAN, "%s\n", builtins[i]);
+    }
     return CONTINUE_CODE;
 }
